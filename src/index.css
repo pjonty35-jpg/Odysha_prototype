@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  h1, h2, h3, .font-serif {
+    font-family: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
+  }
+}
+
+/* Custom scrollbar for clean horizontal card scrolling on mobile */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.leaflet-container {
+  font-family: inherit;
+  z-index: 0;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 10px;
+}
+
+.leaflet-popup-content {
+  margin: 12px 14px;
+}
+
+/* =========================================
+   ODYSHA JOURNEY MAP
+   ========================================= */
+
+.odysha-map-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.odysha-marker {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #182f59;
+  border: 3px solid #ffffff;
+
+  box-shadow:
+    0 3px 10px rgba(24, 47, 89, 0.28),
+    0 1px 3px rgba(0, 0, 0, 0.15);
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.odysha-marker span {
+  color: #ffffff;
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Leaflet popup */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(24, 47, 89, 0.16);
+}
+
+.leaflet-popup-content {
+  margin: 12px 14px;
+}
+
+/* Zoom buttons */
+.leaflet-control-zoom {
+  border: 1px solid #dfd4c4 !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(24, 47, 89, 0.12) !important;
+}
+
+.leaflet-control-zoom a {
+  width: 34px !important;
+  height: 34px !important;
+  line-height: 34px !important;
+
+  background: rgba(255, 255, 255, 0.96) !important;
+  color: #182f59 !important;
+
+  border-bottom: 1px solid #eadfce !important;
+}
+
+.leaflet-control-zoom a:last-child {
+  border-bottom: none !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: #f8f2e8 !important;
+  color: #c9552d !important;
+}
+
+/* Attribution */
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #6b7280 !important;
+  font-size: 9px !important;
+}
