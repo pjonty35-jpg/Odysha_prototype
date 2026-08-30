@@ -59,7 +59,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPlan, onSelectDestination, onE
           
           {/* Crisp, natural lighting overlays for optimal contrast and zero fog */}
           {/* Subtle bottom fade to merge smoothly into the category section */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#faf8f4] via-transparent to-transparent opacity-90 sm:opacity-75" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#faf8f4] via-transparent to-transparent opacity-[0.65] sm:opacity-75" />
           {/* Desktop & Tablet soft left-side text backing */}
           <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-[#faf8f4]/90 via-[#faf8f4]/45 to-transparent w-full md:w-3/5" />
           <div className="absolute inset-0 bg-black/10 sm:bg-transparent pointer-events-none" />
@@ -71,7 +71,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPlan, onSelectDestination, onE
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-2xl bg-[#faf7f2]/88 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none p-5 xs:p-6 sm:p-0 rounded-3xl sm:rounded-none border border-white/60 sm:border-0 shadow-lg sm:shadow-none transition-all"
+            className="max-w-2xl bg-white/[0.74] sm:bg-transparent backdrop-blur-xl sm:backdrop-blur-none p-5 xs:p-6 sm:p-0 rounded-3xl sm:rounded-none border border-white/70 sm:border-0 shadow-[0_18px_48px_rgba(19,37,57,0.20)] sm:shadow-none transition-all"
           >
             
             {/* Main Headline matching reference typography */}
@@ -110,7 +110,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPlan, onSelectDestination, onE
                     document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' });
                   }
                 }}
-                className="bg-[#f7eedf]/90 hover:bg-[#fae7cb] text-[#292218] border border-[#d6c2a4] text-xs sm:text-sm font-medium px-4 sm:px-5 py-2.5 rounded-lg transition-colors shadow-2xs backdrop-blur-xs text-center cursor-pointer inline-flex items-center justify-center w-auto"
+                className="bg-white/35 hover:bg-white/52 sm:bg-[#f7eedf]/90 sm:hover:bg-[#fae7cb] text-[#292218] border border-white/70 sm:border-[#d6c2a4] text-xs sm:text-sm font-medium px-4 sm:px-5 py-2.5 rounded-lg transition-colors shadow-sm sm:shadow-2xs backdrop-blur-md sm:backdrop-blur-xs text-center cursor-pointer inline-flex items-center justify-center w-auto"
               >
                 Explore Odisha
               </button>

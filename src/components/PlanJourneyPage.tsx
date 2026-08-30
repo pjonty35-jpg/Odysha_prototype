@@ -583,8 +583,8 @@ export default function PlanJourneyPage({
               Tell us how you travel. We’ll craft the perfect Odisha journey for you.
             </p>
 
-            <div className="mt-5 w-[230px] sm:w-[270px] md:w-[300px]">
-              <OdishaDivider />
+            <div className="mt-5 w-[245px] sm:w-[255px]">
+              <OdishaDivider className="my-0 justify-start" />
             </div>
           </div>
 
@@ -1022,23 +1022,6 @@ export default function PlanJourneyPage({
         <JourneyBuildingOverlay activeStage={buildingStage} />
       )}
 
-      <section className="relative z-10 min-h-[165px] overflow-hidden border-t border-[#eee0cf] bg-[#f7efe3]">
-        <div className="relative mx-auto flex max-w-[1500px] items-center justify-center px-6 py-8 text-center">
-          <div>
-            <p className="font-serif text-[18px] text-[#15294a] md:text-[20px]">
-              Odisha is not just a destination, it’s a feeling.
-            </p>
-            <p className="mt-1 font-serif text-[15px] text-[#bd4d22]">Let us show you the real Odisha.</p>
-            <div className="mt-4 flex items-center justify-center gap-2 text-[#b87542]">
-              <span className="h-px w-16 bg-[#d7ad82]" />
-              <span className="text-[10px]">◆</span>
-              <span className="text-[12px]">✤</span>
-              <span className="text-[10px]">◆</span>
-              <span className="h-px w-16 bg-[#d7ad82]" />
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

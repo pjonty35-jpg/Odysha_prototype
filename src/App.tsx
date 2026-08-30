@@ -165,7 +165,13 @@ export default function App() {
       </main>
 
       {/* 6. Footer Banner with Authentic Pattachitra Banner & Apple Translucent Card */}
-      <FooterBanner />
+      <FooterBanner
+        variant={
+          currentPage === 'explore' || currentPage === 'plan'
+            ? 'journey'
+            : 'default'
+        }
+      />
 
       {/* Interactive Modals */}
       <ExplorePlaceModal
@@ -196,4 +202,3 @@ export default function App() {
     </div>
   );
 }
-

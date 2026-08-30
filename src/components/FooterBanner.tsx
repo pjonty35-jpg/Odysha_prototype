@@ -1,19 +1,30 @@
 import React from 'react';
 import footerImage from '../assets/images/odisha_footer_original.png';
+import journeyFooterImage from '../../Footer2.png';
 
-export const FooterBanner: React.FC = () => {
+interface FooterBannerProps {
+  variant?: 'default' | 'journey';
+}
+
+export const FooterBanner: React.FC<FooterBannerProps> = ({
+  variant = 'default',
+}) => {
+  const backgroundImage =
+    variant === 'journey' ? journeyFooterImage : footerImage;
+  const footerHeight = variant === 'journey' ? '400px' : '260px';
+
   return (
     <footer
       style={{
         position: 'relative',
         width: '100%',
-        minHeight: '260px',
+        minHeight: footerHeight,
         overflow: 'hidden',
         backgroundColor: '#faf3e7',
       }}
     >
       <img
-        src={footerImage}
+        src={backgroundImage}
         alt="Odisha cultural artwork"
         style={{
           position: 'absolute',
@@ -21,7 +32,8 @@ export const FooterBanner: React.FC = () => {
           width: '100%',
           height: '100%',
           objectFit: 'cover',
-          objectPosition: 'center',
+          objectPosition:
+            variant === 'journey' ? 'center bottom' : 'center',
         }}
       />
 
@@ -29,7 +41,7 @@ export const FooterBanner: React.FC = () => {
         style={{
           position: 'relative',
           zIndex: 1,
-          minHeight: '260px',
+          minHeight: footerHeight,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
