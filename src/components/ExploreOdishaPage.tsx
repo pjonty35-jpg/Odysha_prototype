@@ -27,6 +27,8 @@ import {
 
 import { EXPLORE_PLACES, ExplorePlaceItem } from '../data/exploreData';
 import { ASSET_IMAGES } from '../data/landingData';
+import ExploreOdishaBg from '../assets/images/ExploreOdishaBg.png';
+import { PattachitraGrainBackground } from './OdishaMotifs';
 
 interface ExploreOdishaPageProps {
   onSelectPlace: (place: ExplorePlaceItem) => void;
@@ -56,56 +58,48 @@ const CATEGORY_FILTERS = [
   {
     id: 'nature',
     label: 'Nature',
-    count: 120,
     icon: TreePine,
     color: 'text-emerald-700',
   },
   {
     id: 'heritage',
     label: 'Heritage',
-    count: 98,
     icon: Landmark,
     color: 'text-amber-800',
   },
   {
     id: 'spiritual',
     label: 'Spiritual',
-    count: 76,
     icon: Flame,
     color: 'text-amber-600',
   },
   {
     id: 'beaches',
     label: 'Beaches',
-    count: 52,
     icon: Waves,
     color: 'text-blue-600',
   },
   {
     id: 'wildlife',
     label: 'Wildlife',
-    count: 38,
     icon: PawPrint,
     color: 'text-green-800',
   },
   {
     id: 'arts',
     label: 'Arts & Crafts',
-    count: 45,
     icon: Palette,
     color: 'text-rose-700',
   },
   {
     id: 'food',
     label: 'Food',
-    count: 61,
     icon: Utensils,
     color: 'text-red-600',
   },
   {
     id: 'hidden',
     label: 'Hidden Gems',
-    count: 86,
     icon: Gem,
     color: 'text-[#9a3412]',
   },
@@ -190,6 +184,21 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
     setSortBy('recommended');
     setActivePage(1);
   };
+
+  // Category totals are calculated from the current source data, not placeholders.
+  const categoryCounts = useMemo(
+    () =>
+      CATEGORY_FILTERS.reduce<Record<string, number>>((counts, category) => {
+        counts[category.id] = EXPLORE_PLACES.filter((place) =>
+          category.id === 'hidden'
+            ? place.badgeType === 'Hidden Gem'
+            : place.categoryType === category.id
+        ).length;
+
+        return counts;
+      }, {}),
+    []
+  );
 
   const filteredPlaces = useMemo(() => {
     const results = EXPLORE_PLACES.filter((place) => {
@@ -314,19 +323,13 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
     sortBy,
   ]);
 
-  const resultCount =
-    selectedCategories.length === 0 &&
-    selectedRegion === 'All Odisha' &&
-    selectedBudget === 'all' &&
-    selectedPopularity === 'all' &&
-    !searchQuery
-      ? 248
-      : filteredPlaces.length;
+  // Keep the result total in sync with the source data and active filters.
+  const resultCount = filteredPlaces.length;
 
   return (
     <div
       className="
-        relative min-h-screen
+        relative isolate min-h-screen
         bg-[#faf8f4]
         text-[#202020]
         pb-16
@@ -339,6 +342,8 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
         }
       }}
     >
+      {/* Landing-page Pattachitra art and parchment-grain backdrop */}
+      <PattachitraGrainBackground />
 
       {/* =========================================================
           HERO / PAGE INTRO
@@ -350,39 +355,20 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
           max-w-7xl
           mx-auto
           px-4 sm:px-6 lg:px-8
-          pt-8 sm:pt-10
-          pb-5
+          py-5 sm:py-7
           overflow-hidden
         "
       >
 
-        {/* Decorative temple sketch */}
-
-        <div
-          className="
-            absolute
-            right-0
-            -top-1
-            w-56 sm:w-72 md:w-80 lg:w-96
-            h-40 sm:h-48
-            pointer-events-none
-            select-none
-            opacity-25
-            md:opacity-35
-          "
-        >
+        {/* Explore Odisha hero backdrop */}
+        <div className="absolute inset-x-4 sm:inset-x-6 lg:inset-x-8 inset-y-0 overflow-hidden rounded-[22px] bg-[#172537]">
           <img
-            src={ASSET_IMAGES.templeSketch}
-            alt=""
-            className="
-              w-full
-              h-full
-              object-contain
-              object-right-top
-              mix-blend-multiply
-            "
-            referrerPolicy="no-referrer"
+            src={ExploreOdishaBg}
+            alt="Misty Odisha hills and river at sunrise"
+            className="h-full w-full object-cover object-center"
           />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#101d2c]/52 via-[#132334]/22 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#101d2c]/12 via-transparent to-transparent" />
         </div>
 
         <div
@@ -395,6 +381,8 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
             md:items-center
             md:justify-between
             gap-6
+            py-8 sm:py-10
+            px-5 sm:px-8 lg:px-10
           "
         >
 
@@ -405,7 +393,7 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
             <button
               type="button"
               onClick={onBackHome}
-              className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-[#26364c] transition-colors hover:text-[#b84a2d]"
+              className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-white/90 transition-colors hover:text-[#f7d8b0]"
             >
               <span className="text-base">←</span>
               Back to Home
@@ -421,7 +409,7 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
                 leading-none
                 font-bold
                 tracking-tight
-                text-[#142232]
+                text-white
               "
             >
               Explore Odisha
@@ -432,7 +420,7 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
                 mt-2
                 text-sm
                 sm:text-base
-                text-[#4c4c4c]
+                text-white/85
               "
             >
               From iconic destinations to places locals love.
@@ -562,6 +550,7 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
           max-w-7xl
           mx-auto
           px-4 sm:px-6 lg:px-8
+          mt-3 sm:mt-5
           mb-5
         "
         onClick={(event) => event.stopPropagation()}
@@ -708,7 +697,7 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
                           py-0.5
                         "
                       >
-                        {category.count}
+                        {categoryCounts[category.id]}
                       </span>
                     </button>
                   );
@@ -1203,7 +1192,7 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
                             text-gray-500
                           "
                         >
-                          {category.count}
+                          {categoryCounts[category.id]}
                         </span>
 
                       </label>
@@ -2242,7 +2231,7 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
                           text-gray-500
                         "
                       >
-                        {category.count}
+                        {categoryCounts[category.id]}
                       </span>
 
                     </label>
