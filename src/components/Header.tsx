@@ -5,8 +5,8 @@ import { KonarkMandalaLogo } from './OdishaMotifs';
 import { ASSET_IMAGES } from '../data/landingData';
 
 interface HeaderProps {
-  currentPage?: 'home' | 'explore' | 'plan' | 'generatedJourney';
-  onNavigate?: (page: 'home' | 'explore') => void;
+  currentPage?: 'home' | 'explore' | 'watch' | 'plan' | 'generatedJourney';
+  onNavigate?: (page: 'home' | 'explore' | 'watch') => void;
   onOpenPlan: () => void;
   onSelectCategory?: (id: string) => void;
   savedCount?: number;
@@ -32,6 +32,12 @@ export const Header: React.FC<HeaderProps> = ({
       id: 'explore',
       onClick: () => onNavigate?.('explore'),
       isActive: currentPage === 'explore',
+    },
+    {
+      name: 'Watch Odisha',
+      id: 'watch',
+      onClick: () => onNavigate?.('watch'),
+      isActive: currentPage === 'watch',
     },
     {
       name: 'Plan Journey',

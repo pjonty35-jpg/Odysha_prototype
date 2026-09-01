@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Search, SlidersHorizontal, ArrowRight, MapPin, Sparkles } from 'lucide-react';
+import { Search, SlidersHorizontal, ArrowRight, MapPin, Play, Sparkles } from 'lucide-react';
 import { ASSET_IMAGES, POPULAR_DESTINATIONS, CATEGORIES } from '../data/landingData';
 
 interface HeroProps {
   onOpenPlan: () => void;
   onSelectDestination: (id: string) => void;
-  onExplore?: () => void;
+  onExplore: () => void;
+  onExploreVisual?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenPlan, onSelectDestination, onExplore }) => {
+export const Hero: React.FC<HeroProps> = ({
+  onOpenPlan,
+  onSelectDestination,
+  onExplore,
+  onExploreVisual,
+}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterOpen, setFilterOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
@@ -94,22 +100,23 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPlan, onSelectDestination, onE
             <div className="mt-5 sm:mt-6 flex flex-row items-center gap-2.5 sm:gap-3.5 flex-wrap">
               {/* Primary CTA */}
               <button
-                onClick={onOpenPlan}
+                onClick={onExploreVisual}
                 className="group bg-[#162436] hover:bg-[#0f1a27] text-white text-xs sm:text-sm font-medium px-4 sm:px-5 py-2.5 rounded-lg shadow-sm inline-flex items-center justify-center gap-2 transition-all transform active:scale-98 cursor-pointer w-auto"
               >
-                <span>Plan My Journey</span>
-                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-0.5" />
+                <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
+                <span>Watch Odisha</span>
               </button>
 
               {/* Secondary CTA */}
               <button
-                onClick={() => {
-                  if (onExplore) {
-                    onExplore();
-                  } else {
-                    document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
+                onClick={onOpenPlan}
+                className="bg-white/35 hover:bg-white/52 sm:bg-[#f7eedf]/90 sm:hover:bg-[#fae7cb] text-[#292218] border border-white/70 sm:border-[#d6c2a4] text-xs sm:text-sm font-medium px-4 sm:px-5 py-2.5 rounded-lg transition-colors shadow-sm sm:shadow-2xs backdrop-blur-md sm:backdrop-blur-xs text-center cursor-pointer inline-flex items-center justify-center w-auto"
+              >
+                Plan My Journey
+              </button>
+
+              <button
+                onClick={onExplore}
                 className="bg-white/35 hover:bg-white/52 sm:bg-[#f7eedf]/90 sm:hover:bg-[#fae7cb] text-[#292218] border border-white/70 sm:border-[#d6c2a4] text-xs sm:text-sm font-medium px-4 sm:px-5 py-2.5 rounded-lg transition-colors shadow-sm sm:shadow-2xs backdrop-blur-md sm:backdrop-blur-xs text-center cursor-pointer inline-flex items-center justify-center w-auto"
               >
                 Explore Odisha

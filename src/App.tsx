@@ -7,6 +7,8 @@ import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { CategoriesSection } from './components/CategoriesSection';
+import { VisualStoriesSection } from './components/VisualStoriesSection';
+import { WatchOdishaPage } from './components/WatchOdishaPage';
 import { ValuePropositionSection } from './components/ValuePropositionSection';
 import { DestinationsSection } from './components/DestinationsSection';
 import { ExploreOdishaPage } from './components/ExploreOdishaPage';
@@ -21,7 +23,7 @@ import { DestinationItem, CategoryItem } from './types';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<
-    'home' | 'explore' | 'plan' | 'generatedJourney'
+    'home' | 'explore' | 'watch' | 'plan' | 'generatedJourney'
   >('home');
   const [selectedDestination, setSelectedDestination] = useState<DestinationItem | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<CategoryItem | null>(null);
@@ -50,7 +52,7 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
-  const handleNavigate = (page: 'home' | 'explore' | 'plan') => {
+  const handleNavigate = (page: 'home' | 'explore' | 'watch' | 'plan') => {
   setCurrentPage(page);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
@@ -116,6 +118,15 @@ export default function App() {
               }}
               onSelectDestination={handleSelectDestById}
               onExplore={() => handleNavigate('explore')}
+              onExploreVisual={() => handleNavigate('watch')}
+            />
+
+            <VisualStoriesSection
+              onPlanJourney={() => {
+                setPlanInitialDest('');
+                setCurrentPage('plan');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
             />
 
             {/* 3. Categories ("What kind of Odisha are you looking for?") */}
@@ -139,6 +150,15 @@ export default function App() {
     onToggleBookmark={handleToggleBookmark}
     onBackHome={() => {
       setCurrentPage('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }}
+  />
+) : currentPage === 'watch' ? (
+  <WatchOdishaPage
+    onBackHome={() => handleNavigate('home')}
+    onPlanJourney={() => {
+      setPlanInitialDest('');
+      setCurrentPage('plan');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }}
   />
