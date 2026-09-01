@@ -122,11 +122,7 @@ export default function App() {
             />
 
             <VisualStoriesSection
-              onPlanJourney={() => {
-                setPlanInitialDest('');
-                setCurrentPage('plan');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
+              onWatchOdisha={() => handleNavigate('watch')}
             />
 
             {/* 3. Categories ("What kind of Odisha are you looking for?") */}

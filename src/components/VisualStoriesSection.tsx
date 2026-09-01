@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import { ArrowRight, Play, X } from 'lucide-react';
 import { OdishaDivider } from './OdishaMotifs';
 import chilikaImage from '../assets/images/explore_chilika.jpg';
 import konarkImage from '../assets/images/explore_konark.jpg';
-import dudumaImage from '../assets/images/explore_duduma.jpg';
 
 interface VisualStory {
   id: string;
@@ -34,35 +34,32 @@ const VISUAL_STORIES: VisualStory[] = [
     image: konarkImage,
     videoId: 'ruqZJSXLkg0',
   },
-  {
-    id: 'duduma',
-    title: 'The sound of the Eastern Ghats',
-    location: 'Duduma Waterfall',
-    duration: '02:04',
-    description: 'Follow the Machkund River into one of Odisha’s most dramatic landscapes.',
-    image: dudumaImage,
-    videoId: 'AQO-VLqYvy8',
-  },
 ];
 
 interface VisualStoriesSectionProps {
-  onPlanJourney: () => void;
+  onWatchOdisha: () => void;
 }
 
 export const VisualStoriesSection: React.FC<VisualStoriesSectionProps> = ({
-  onPlanJourney,
+  onWatchOdisha,
 }) => {
   const [activeStory, setActiveStory] = useState<VisualStory | null>(null);
 
   return (
     <section
       id="visual-stories"
-      className="relative overflow-hidden bg-[#faf8f4] px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
+      className="relative overflow-hidden bg-[#faf8f4] px-4 pb-5 pt-16 sm:px-6 sm:pb-6 sm:pt-20 lg:px-8"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(192,123,62,0.09),transparent_26%),radial-gradient(circle_at_90%_80%,rgba(24,47,89,0.08),transparent_24%)]" />
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="mx-auto max-w-2xl text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          className="mx-auto max-w-2xl text-center"
+        >
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b84a2d]">
             Visual journeys
           </p>
@@ -73,15 +70,17 @@ export const VisualStoriesSection: React.FC<VisualStoriesSectionProps> = ({
             Start with a feeling. Then turn the places that move you into a journey of your own.
           </p>
           <OdishaDivider className="my-5 justify-center" maxHeight="max-h-4 sm:max-h-5" />
-        </div>
+        </motion.div>
 
-        <div className="mt-8 grid gap-5 md:grid-cols-3">
+        <div className="mt-8 grid gap-5 md:grid-cols-2">
           {VISUAL_STORIES.map((story, index) => (
-            <article
+            <motion.article
               key={story.id}
-              className={`group relative min-h-[360px] overflow-hidden rounded-[24px] border border-white/70 bg-[#172637] shadow-[0_16px_42px_rgba(22,38,54,0.14)] ${
-                index === 0 ? 'md:col-span-2 md:min-h-[440px]' : ''
-              }`}
+              initial={{ opacity: 0, y: 28, scale: 0.985 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.65, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="group relative min-h-[360px] overflow-hidden rounded-[24px] border border-white/70 bg-[#172637] shadow-[0_16px_42px_rgba(22,38,54,0.14)] md:min-h-[440px]"
             >
               <img
                 src={story.image}
@@ -115,23 +114,28 @@ export const VisualStoriesSection: React.FC<VisualStoriesSectionProps> = ({
                   </p>
                 </div>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
 
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-[#e9dccd] bg-white/60 px-5 py-5 text-center backdrop-blur-sm sm:flex-row sm:px-6 sm:text-left">
-          <p className="text-sm text-[#46556a]">
-            Seen something you want to experience? We’ll help you build the route around it.
-          </p>
-          <button
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.45, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-8 flex justify-center"
+        >
+          <motion.button
             type="button"
-            onClick={onPlanJourney}
+            onClick={onWatchOdisha}
             className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#162436] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0f1a27]"
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.98 }}
           >
-            Build my visual journey
+            Watch more of Odisha
             <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
 
       {activeStory && (
