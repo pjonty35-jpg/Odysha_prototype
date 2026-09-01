@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Globe, Bell, Bookmark, ChevronDown, Menu, X } from 'lucide-react';
+import { Globe, Bell, Bookmark, ChevronDown, Menu, ShieldAlert, X } from 'lucide-react';
 import { KonarkMandalaLogo } from './OdishaMotifs';
 import { ASSET_IMAGES } from '../data/landingData';
 
 interface HeaderProps {
-  currentPage?: 'home' | 'explore' | 'watch' | 'plan' | 'generatedJourney';
-  onNavigate?: (page: 'home' | 'explore' | 'watch') => void;
+  currentPage?: 'home' | 'explore' | 'watch' | 'emergency' | 'plan' | 'generatedJourney';
+  onNavigate?: (page: 'home' | 'explore' | 'watch' | 'emergency') => void;
   onOpenPlan: () => void;
   onSelectCategory?: (id: string) => void;
   savedCount?: number;
@@ -57,15 +57,10 @@ export const Header: React.FC<HeaderProps> = ({
       isActive: false,
     },
     {
-      name: 'Community',
-      id: 'community',
-      onClick: () => {
-        if (currentPage !== 'home') onNavigate?.('home');
-        setTimeout(() => {
-          document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      },
-      isActive: false,
+      name: 'Emergency Help',
+      id: 'emergency',
+      onClick: () => onNavigate?.('emergency'),
+      isActive: currentPage === 'emergency',
     },
     {
       name: 'About',
@@ -113,7 +108,7 @@ export const Header: React.FC<HeaderProps> = ({
                     : 'text-gray-700 hover:text-[#9a3412]'
                 }`}
               >
-                <span>{link.name}</span>
+                <span className="inline-flex items-center gap-1.5">{link.id === 'emergency' && <ShieldAlert className="h-3.5 w-3.5" />}{link.name}</span>
                 {/* Active indicator bar matching screenshot */}
                 {link.isActive ? (
                   <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#9a3412] rounded-full" />

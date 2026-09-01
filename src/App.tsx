@@ -9,6 +9,7 @@ import { Hero } from './components/Hero';
 import { CategoriesSection } from './components/CategoriesSection';
 import { VisualStoriesSection } from './components/VisualStoriesSection';
 import { WatchOdishaPage } from './components/WatchOdishaPage';
+import { EmergencyHelpPage } from './components/EmergencyHelpPage';
 import { ValuePropositionSection } from './components/ValuePropositionSection';
 import { DestinationsSection } from './components/DestinationsSection';
 import { ExploreOdishaPage } from './components/ExploreOdishaPage';
@@ -23,7 +24,7 @@ import { DestinationItem, CategoryItem } from './types';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<
-    'home' | 'explore' | 'watch' | 'plan' | 'generatedJourney'
+    'home' | 'explore' | 'watch' | 'emergency' | 'plan' | 'generatedJourney'
   >('home');
   const [selectedDestination, setSelectedDestination] = useState<DestinationItem | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<CategoryItem | null>(null);
@@ -52,7 +53,7 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
-  const handleNavigate = (page: 'home' | 'explore' | 'watch' | 'plan') => {
+  const handleNavigate = (page: 'home' | 'explore' | 'watch' | 'emergency' | 'plan') => {
   setCurrentPage(page);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
@@ -158,6 +159,8 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }}
   />
+) : currentPage === 'emergency' ? (
+  <EmergencyHelpPage onBackHome={() => handleNavigate('home')} />
 ) : currentPage === 'plan' ? (
   /* Plan Your Journey Dedicated Page */
   <PlanJourneyPage
