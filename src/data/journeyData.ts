@@ -18,6 +18,7 @@ export interface JourneyDay {
   lng: number;
   activities: JourneyActivity[];
   whyInPlan: string;
+  safetyNote?: string;
 }
 
 export interface JourneyData {
@@ -31,6 +32,7 @@ export interface JourneyData {
   personalizationMessage: string;
 
   journeyTips: string[];
+  safetyNotes: string[];
 
   days: JourneyDay[];
 
@@ -75,6 +77,11 @@ export const DEFAULT_JOURNEY: JourneyData = {
     'Keep some buffer time between major stops.',
     'Carry water and comfortable footwear.',
     'Check attraction timings before visiting.',
+  ],
+
+  safetyNotes: [
+    'For immediate danger, illness, accident or fire, call 112. Odysha does not replace emergency services.',
+    'Use authorised operators, follow instructions displayed at each attraction, and check current local conditions before setting out.',
   ],
 
   days: [

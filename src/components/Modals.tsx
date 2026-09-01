@@ -4,6 +4,16 @@ import { DestinationItem, CategoryItem } from '../types';
 import { ExplorePlaceItem } from '../data/exploreData';
 import { CategoryIcon } from './OdishaMotifs';
 
+const getPlaceSafetyInfo = (place: ExplorePlaceItem) => {
+  const name = place.name.toLowerCase();
+
+  if (name.includes('chilika')) return 'Follow designated boating guidelines, wear provided safety equipment, and check current local authority advisories before travel.';
+  if (name.includes('beach') || name.includes('chandrabagha')) return 'Stay within designated beach areas, follow lifeguard and local authority guidance, and avoid entering the sea in unsafe conditions.';
+  if (name.includes('deomali') || name.includes('waterfall') || name.includes('gulmi')) return 'Start early, stay on marked routes, carry water, and avoid remote terrain after dark or during unsafe weather.';
+  if (name.includes('temple') || name.includes('konark')) return 'Follow site rules, use marked visitor areas, and keep hydrated during busy hours or high heat.';
+  return 'Check current local conditions before travel, use authorised services, and follow instructions at the destination.';
+};
+
 interface ExplorePlaceModalProps {
   place: ExplorePlaceItem | null;
   onClose: () => void;
@@ -80,6 +90,12 @@ export const ExplorePlaceModal: React.FC<ExplorePlaceModalProps> = ({
               <div className="text-xs font-bold uppercase tracking-wider">Local Insider Tip</div>
               <p className="text-xs sm:text-sm font-medium mt-0.5">{place.tipText}</p>
             </div>
+          </div>
+
+          <div className="rounded-2xl border border-[#c7d9cf] bg-[#f1f8f2] p-4">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#2f6b48]"><ShieldCheck className="h-4 w-4" /> Safety information</div>
+            <p className="mt-1.5 text-xs leading-relaxed text-[#365b45] sm:text-sm">{getPlaceSafetyInfo(place)}</p>
+            <p className="mt-2 text-[11px] font-semibold text-[#527260]">Source: Odisha Tourism & local authority guidance</p>
           </div>
 
           {/* Practical Info Grid */}

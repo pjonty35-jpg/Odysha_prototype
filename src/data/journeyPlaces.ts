@@ -36,6 +36,7 @@ export interface JourneyPlace {
   icon: string;
 
   localTips?: string[];
+  safetyNotes?: string[];
 }
 
 export const JOURNEY_PLACES: JourneyPlace[] = [
@@ -145,6 +146,9 @@ export const JOURNEY_PLACES: JourneyPlace[] = [
       'A classic Odisha coast experience with open sea, local life and evening views.',
     bestTime: 'Oct – Mar',
     icon: 'beach',
+    safetyNotes: [
+      'Stay within designated beach areas, follow lifeguard and local authority instructions, and avoid entering the sea when conditions are unsafe.',
+    ],
   },
 
   {
@@ -167,6 +171,9 @@ export const JOURNEY_PLACES: JourneyPlace[] = [
     localTips: [
         'Early morning or evening is generally more comfortable for a beach stop than the strongest afternoon heat.',
     ],
+    safetyNotes: [
+      'Follow beach signage and local authority advisories, especially around sea conditions and sunset.',
+    ],
   },
 
   {
@@ -186,6 +193,9 @@ export const JOURNEY_PLACES: JourneyPlace[] = [
       'An iconic masterpiece of Kalinga architecture shaped like a monumental stone chariot.',
     bestTime: 'Oct – Mar',
     icon: 'temple',
+    safetyNotes: [
+      'Carry water, follow monument instructions and use marked visitor areas—especially during busy hours or high heat.',
+    ],
   },
 
   {
@@ -205,6 +215,9 @@ export const JOURNEY_PLACES: JourneyPlace[] = [
       'A quieter beach near Konark known for its sunrise and open coastal landscape.',
     bestTime: 'Oct – Feb',
     icon: 'beach',
+    safetyNotes: [
+      'Follow beach signage and local authority advisories; avoid isolated stretches after dark.',
+    ],
   },
 
   /* =========================================================
@@ -233,6 +246,9 @@ export const JOURNEY_PLACES: JourneyPlace[] = [
         'Keep some time for browsing and buying directly from artisans.',
         'Pair Raghurajpur with the Puri side of the itinerary rather than making a long cross-Odisha detour.',
     ],
+    safetyNotes: [
+      'Use recognised workshops or guides, keep valuables with you, and respect private homes and local community boundaries.',
+    ],
   },
 
   /* =========================================================
@@ -259,6 +275,9 @@ export const JOURNEY_PLACES: JourneyPlace[] = [
     localTips: [
         'Keep your boat schedule protected with some buffer because the lake experience is more time-sensitive than a normal city attraction.',
         'Check the latest boating arrangements before travelling to Satapada.',
+    ],
+    safetyNotes: [
+      'Use designated boating operators, wear the supplied safety equipment, and follow boating instructions and current local authority advisories.',
     ],
   },
 
@@ -435,6 +454,9 @@ export const JOURNEY_PLACES: JourneyPlace[] = [
     localTips: [
         'Start early for a comfortable hill day and keep extra time for road travel.',
         'Carry water and footwear suitable for uneven outdoor terrain.',
+    ],
+    safetyNotes: [
+      'Start early, stay on established routes, carry water, and avoid hill travel after dark or during unsafe weather.',
     ],
   },
 

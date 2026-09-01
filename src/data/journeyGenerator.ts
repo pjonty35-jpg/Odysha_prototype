@@ -699,18 +699,18 @@ export function generateJourney(
      ======================================================= */
 
   const selectedPlaces: JourneyPlace[] = [];
-  
-
-  if (
-    selectedPlaces.some(
-      (place) =>
-        place.district === 'Khordha',
-    )
-  ) {
-    
-  }
-
   const usedIds = new Set<string>();
+
+  /* The starting point is a hard route anchor. A great itinerary may
+   * never send the traveller across Odisha before their first stop. */
+  const startingAnchor = JOURNEY_PLACES
+    .filter((place) => isTravellerEligible(place, safePreferences.travellers))
+    .map((place) => ({
+      place,
+      distance: distanceKm(startingPoint, { lat: place.lat, lng: place.lng }),
+    }))
+    .filter(({ distance }) => distance <= 150)
+    .sort((a, b) => a.distance - b.distance)[0]?.place;
 
   /*
    * First pass:
@@ -814,6 +814,20 @@ export function generateJourney(
     }
   }
 
+  /* Keep the first day close to the starting point even when interest
+   * scoring alone would otherwise fill the itinerary with distant stops. */
+  if (startingAnchor && !usedIds.has(startingAnchor.id)) {
+    const targetCount = requiredDays * placesPerDay;
+
+    if (selectedPlaces.length >= targetCount) {
+      const displaced = selectedPlaces.pop();
+      if (displaced) usedIds.delete(displaced.id);
+    }
+
+    selectedPlaces.unshift(startingAnchor);
+    usedIds.add(startingAnchor.id);
+  }
+
 
   /* =======================================================
      GROUP PLACES INTO DAYS
@@ -844,26 +858,41 @@ for (const place of selectedPlaces) {
 }
 
 /*
- * Order districts according to the strongest
- * matching place inside each district.
+ * Order districts into a real route, not a relevance-ranked list.
+ * Each new day is the closest suitable district to the preceding stop.
  */
-const orderedDistricts = [
-  ...districtGroups.entries(),
-].sort((a, b) => {
-  const aBest =
-    scoredPlaces.find(
-      (item) =>
-        item.place.district === a[0],
-    )?.score ?? -999;
+const remainingDistricts = [...districtGroups.entries()];
+const orderedDistricts: Array<[string, JourneyPlace[]]> = [];
+let routePosition = startingPoint;
 
-  const bBest =
-    scoredPlaces.find(
-      (item) =>
-        item.place.district === b[0],
-    )?.score ?? -999;
+while (remainingDistricts.length) {
+  let nearestIndex = 0;
+  let nearestDistance = Number.POSITIVE_INFINITY;
 
-  return bBest - aBest;
-});
+  for (let index = 0; index < remainingDistricts.length; index++) {
+    const [, places] = remainingDistricts[index];
+    const distanceToDistrict = Math.min(
+      ...places.map((place) =>
+        distanceKm(routePosition, { lat: place.lat, lng: place.lng }),
+      ),
+    );
+
+    if (distanceToDistrict < nearestDistance) {
+      nearestDistance = distanceToDistrict;
+      nearestIndex = index;
+    }
+  }
+
+  const [nextDistrict] = remainingDistricts.splice(nearestIndex, 1);
+  orderedDistricts.push(nextDistrict);
+  const [, nextPlaces] = nextDistrict;
+  const nearestPlace = [...nextPlaces].sort(
+    (a, b) =>
+      distanceKm(routePosition, { lat: a.lat, lng: a.lng }) -
+      distanceKm(routePosition, { lat: b.lat, lng: b.lng }),
+  )[0];
+  routePosition = { lat: nearestPlace.lat, lng: nearestPlace.lng };
+}
 
 /*
  * One district becomes one itinerary day.
@@ -873,6 +902,8 @@ const orderedDistricts = [
  * activities when a district has fewer matching
  * attractions.
  */
+let previousRoutePosition = startingPoint;
+
 for (
   const [district, places] of orderedDistricts
 ) {
@@ -925,22 +956,12 @@ for (
 
   let totalDistance = 0;
 
-  /*
-   * On Day 1, include travel from
-   * the selected starting point.
-   */
-  if (
-    generatedDays.length === 0
-  ) {
-    totalDistance +=
-      distanceKm(
-        startingPoint,
-        {
-          lat: firstPlace.lat,
-          lng: firstPlace.lng,
-        },
-      );
-  }
+  /* Include inter-day transfers as well as the Day 1 departure, so the
+   * displayed distance and journey time match the route on the map. */
+  totalDistance += distanceKm(
+    previousRoutePosition,
+    { lat: firstPlace.lat, lng: firstPlace.lng },
+  );
 
   /*
    * Calculate distance only between
@@ -968,6 +989,12 @@ for (
       );
   }
 
+  const finalPlaceOfDay = dayPlaces[dayPlaces.length - 1];
+  previousRoutePosition = {
+    lat: finalPlaceOfDay.lat,
+    lng: finalPlaceOfDay.lng,
+  };
+
   const dayCost =
     dayPlaces.reduce(
       (sum, place) =>
@@ -975,6 +1002,16 @@ for (
         place.estimatedCost,
       0,
     );
+
+  const daySafetyNotes = [
+    ...new Set(
+      dayPlaces.flatMap((place) => place.safetyNotes ?? []),
+    ),
+  ];
+
+  const daySafetyNote =
+    daySafetyNotes.join(' ') ||
+    'Check the latest opening hours, weather and local conditions before setting out. Follow instructions at the destination.';
 
   const interestText =
     safePreferences.interests
@@ -1028,6 +1065,7 @@ for (
       `for ${safePreferences.travellers.toLowerCase()} travel, ` +
       `${safePreferences.walking.toLowerCase()} walking preference, ` +
       `and journey from ${safePreferences.startingFrom}.`,
+    safetyNote: daySafetyNote,
   });
 }
 
@@ -1133,6 +1171,14 @@ for (
     );
   }
 
+  const safetyNotes = [
+    ...new Set(
+      itineraryPlaces.flatMap((place) => place.safetyNotes ?? []),
+    ),
+    'For an immediate emergency—medical, police, fire or disaster—call 112. Odysha does not dispatch emergency services.',
+    'Use authorised operators and guides, keep valuables secure, and share your plan with someone you trust when visiting remote areas.',
+  ].slice(0, 5);
+
   /* =======================================================
      TOTALS
      ======================================================= */
@@ -1225,6 +1271,7 @@ for (
       `${interestText.toLowerCase()}, with ` +
       `${safePreferences.walking.toLowerCase()} walking preference.`,
     journeyTips: finalJourneyTips,
+    safetyNotes,
     days: finalDays,
 
     summary: {

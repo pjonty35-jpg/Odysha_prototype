@@ -21,6 +21,7 @@ import { PattachitraGrainBackground } from './components/OdishaMotifs';
 import { POPULAR_DESTINATIONS } from './data/landingData';
 import { EXPLORE_PLACES, ExplorePlaceItem } from './data/exploreData';
 import { DestinationItem, CategoryItem } from './types';
+import { ShieldAlert } from 'lucide-react';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<
@@ -191,6 +192,18 @@ export default function App() {
             : 'default'
         }
       />
+
+      {currentPage !== 'emergency' && (
+        <button
+          type="button"
+          onClick={() => handleNavigate('emergency')}
+          className="fixed bottom-5 right-5 z-30 inline-flex items-center gap-2 rounded-full border border-[#f4c58b]/70 bg-[#172d49] px-4 py-3 text-xs font-semibold text-white shadow-[0_12px_28px_rgba(23,45,73,0.28)] transition hover:-translate-y-0.5 hover:bg-[#203c60] sm:bottom-7 sm:right-7"
+          aria-label="Open emergency help"
+        >
+          <ShieldAlert className="h-4 w-4 text-[#f4c58b]" />
+          <span>Safety help</span>
+        </button>
+      )}
 
       {/* Interactive Modals */}
       <ExplorePlaceModal

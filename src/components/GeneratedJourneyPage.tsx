@@ -4,6 +4,7 @@ import { generateJourney, JourneyPreferences } from '../data/journeyGenerator';
 import JourneyMap from './JourneyMap';
 import odishaDivider from '../assets/images/odisha_divider_mandala.png';
 import { KonarkMandalaLogo } from './OdishaMotifs';
+import { ShieldCheck } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
@@ -691,6 +692,15 @@ const formattedTotalCost = `₹${calculatedTotalCost.toLocaleString('en-IN')}`;
 
                   </div>
 
+                  <div className="ml-[27px] mt-3 rounded-lg border border-[#c7d9cf] bg-[#f1f8f2] px-4 py-3">
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-[#2f6b48]">
+                      <ShieldCheck className="h-4 w-4" /> Safety note
+                    </div>
+                    <div className="mt-1 text-xs leading-relaxed text-[#3f624b]">
+                      {day.safetyNote}
+                    </div>
+                  </div>
+
                 </div>
 
                 );
@@ -816,6 +826,19 @@ const formattedTotalCost = `₹${calculatedTotalCost.toLocaleString('en-IN')}`;
           </div>
 
         </div>
+
+        <section className="mt-8 overflow-hidden rounded-2xl border border-[#c7d9cf] bg-[#f1f8f2] shadow-[0_10px_28px_rgba(45,96,67,0.08)]">
+          <div className="flex flex-col gap-3 border-b border-[#c7d9cf] bg-[#e3f1e5] px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#315b41] text-white"><ShieldCheck className="h-5 w-5" /></span><div><h2 className="font-serif text-2xl font-semibold text-[#173e29]">Safety Notes</h2><p className="mt-0.5 text-xs text-[#527260]">Built into this journey from destination-specific guidance.</p></div></div>
+            <a href="tel:112" className="inline-flex w-fit items-center gap-2 rounded-xl bg-[#b84a2d] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#9f3e25]">Emergency: call 112</a>
+          </div>
+          <ul className="grid gap-3 px-5 py-5 sm:grid-cols-2 sm:px-6">
+            {journey.safetyNotes.map((note) => (
+              <li key={note} className="flex gap-3 rounded-xl border border-[#d5e4d7] bg-white/70 px-4 py-3 text-sm leading-relaxed text-[#3f624b]"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#315b41]" />{note}</li>
+            ))}
+          </ul>
+          <p className="px-5 pb-5 text-[11px] font-medium text-[#527260] sm:px-6">Always follow the latest instructions from local authorities and official destination staff. Odysha supports safer planning; it does not replace emergency services.</p>
+        </section>
 
       </main>
 
@@ -1012,6 +1035,24 @@ const PdfDayCard: React.FC<{ day: JourneyData['days'][number] }> = ({ day }) => 
             <span style={{ fontWeight: 700, color: '#a74d2b' }}>Why in your plan?</span>{' '}
             {day.whyInPlan}
           </div>
+
+          {day.safetyNote && (
+            <div
+              style={{
+                marginTop: 5,
+                padding: '5px 7px',
+                borderRadius: 7,
+                border: '1px solid #c7d9cf',
+                background: '#f1f8f2',
+                color: '#3f624b',
+                fontSize: 7.8,
+                lineHeight: 1.25,
+              }}
+            >
+              <span style={{ fontWeight: 700, color: '#2f6b48' }}>Safety note</span>{' '}
+              {day.safetyNote}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -1190,6 +1231,30 @@ const PdfExportPage: React.FC<PdfExportPageProps> = ({
                     <div key={`${index}-${tip}`} style={{ display: 'flex', gap: 6, fontSize: 8.3, lineHeight: 1.3, color: '#5c6169' }}>
                       <span style={{ color: '#b86a32' }}>✦</span>
                       <span>{tip}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div
+                style={{
+                  border: '1px solid #c7d9cf',
+                  borderRadius: 12,
+                  background: '#f1f8f2',
+                  padding: 12,
+                }}
+              >
+                <div style={{ fontFamily: 'Georgia, serif', fontSize: 15, fontWeight: 700, color: '#173e29' }}>
+                  Safety Notes
+                </div>
+                <div style={{ marginTop: 4, fontSize: 7.8, color: '#527260' }}>
+                  Route-specific guidance · Emergency: call 112
+                </div>
+                <div style={{ marginTop: 8, display: 'grid', gap: 6 }}>
+                  {journey.safetyNotes.slice(0, 3).map((note) => (
+                    <div key={note} style={{ display: 'flex', gap: 6, fontSize: 8.1, lineHeight: 1.3, color: '#3f624b' }}>
+                      <span style={{ color: '#315b41', fontWeight: 700 }}>✓</span>
+                      <span>{note}</span>
                     </div>
                   ))}
                 </div>
