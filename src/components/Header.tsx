@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Globe, Bell, Bookmark, ChevronDown, Menu, ShieldAlert, X } from 'lucide-react';
+import type { User } from '@supabase/supabase-js';
 import { KonarkMandalaLogo } from './OdishaMotifs';
 import { ASSET_IMAGES } from '../data/landingData';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
 
 interface HeaderProps {
   currentPage?: 'home' | 'explore' | 'watch' | 'emergency' | 'plan' | 'generatedJourney';
@@ -23,8 +25,74 @@ export const Header: React.FC<HeaderProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authUser, setAuthUser] = useState<User | null>(null);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authFullName, setAuthFullName] = useState('');
+  const [authMessage, setAuthMessage] = useState('');
+  const [authBusy, setAuthBusy] = useState(false);
+  const isLoggedIn = Boolean(authUser);
+
+  useEffect(() => {
+    if (!supabase) return;
+
+    supabase.auth.getUser().then(({ data }) => setAuthUser(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthUser(session?.user ?? null);
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  const handleEmailAuth = async () => {
+    if (!supabase) {
+      setAuthMessage('Authentication is not configured yet. Add the Supabase keys in .env.local.');
+      return;
+    }
+
+    setAuthBusy(true);
+    setAuthMessage('');
+    const result = authMode === 'signup'
+      ? await supabase.auth.signUp({
+          email: authEmail,
+          password: authPassword,
+          options: { data: { full_name: authFullName }, emailRedirectTo: window.location.origin },
+        })
+      : await supabase.auth.signInWithPassword({ email: authEmail, password: authPassword });
+
+    setAuthBusy(false);
+    if (result.error) {
+      setAuthMessage(result.error.message);
+      return;
+    }
+
+    if (authMode === 'signup' && !result.data.session) {
+      setAuthMessage('Check your email to verify your account, then sign in.');
+      return;
+    }
+
+    setAuthModalOpen(false);
+    setAuthPassword('');
+  };
+
+  const handleGoogleAuth = async () => {
+    if (!supabase) {
+      setAuthMessage('Authentication is not configured yet. Add the Supabase keys in .env.local.');
+      return;
+    }
+
+    setAuthBusy(true);
+    setAuthMessage('');
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) {
+      setAuthBusy(false);
+      setAuthMessage(error.message);
+    }
+  };
 
   const navLinks = [
     {
@@ -153,6 +221,7 @@ export const Header: React.FC<HeaderProps> = ({
                 type="button"
                 onClick={() => {
                   setAuthMode('login');
+                  setAuthMessage('');
                   setAuthModalOpen(true);
                 }}
                 className="
@@ -196,7 +265,7 @@ export const Header: React.FC<HeaderProps> = ({
                 >
                   <img
                     src={ASSET_IMAGES.userAvatar}
-                    alt="Jonty"
+                    alt={authUser?.user_metadata?.full_name || authUser?.email || 'User'}
                     className="
                       h-7 w-7
                       rounded-full
@@ -209,7 +278,7 @@ export const Header: React.FC<HeaderProps> = ({
                   />
 
                   <span className="text-xs sm:text-sm font-semibold text-gray-800">
-                    Jonty
+                    {authUser?.user_metadata?.full_name || authUser?.email?.split('@')[0] || 'Traveller'}
                   </span>
 
                   <ChevronDown
@@ -235,16 +304,16 @@ export const Header: React.FC<HeaderProps> = ({
                   >
                     <div className="px-4 py-3 border-b border-gray-100">
                       <p className="text-xs font-bold text-gray-800">
-                        Jonty
+                        {authUser?.user_metadata?.full_name || 'Odysha traveller'}
                       </p>
                       <p className="text-[11px] text-gray-500">
-                        jonty35@gmail.com
+                        {authUser?.email}
                       </p>
                     </div>
 
                     <button
                       type="button"
-                      onClick={() => {
+                      onClick={async () => {
                         setUserDropdownOpen(false);
                         onOpenPlan?.();
                       }}
@@ -262,7 +331,7 @@ export const Header: React.FC<HeaderProps> = ({
 
                     <button
                       type="button"
-                      onClick={() => {
+                      onClick={async () => {
                         setUserDropdownOpen(false);
                         onOpenSaved?.();
                       }}
@@ -282,9 +351,9 @@ export const Header: React.FC<HeaderProps> = ({
 
                     <button
                       type="button"
-                      onClick={() => {
+                      onClick={async () => {
                         setUserDropdownOpen(false);
-                        setIsLoggedIn(false);
+                        await supabase?.auth.signOut();
                       }}
                       className="
                         w-full
@@ -368,13 +437,13 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center gap-3 p-2 bg-white rounded-xl border border-gray-200">
               <img
                 src={ASSET_IMAGES.userAvatar}
-                alt="Jonty"
+                alt={authUser?.user_metadata?.full_name || authUser?.email || 'Traveller'}
                 className="w-8 h-8 rounded-full object-cover border border-amber-200"
                 referrerPolicy="no-referrer"
               />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-gray-900">Jonty</p>
-                <p className="text-[10px] text-gray-500 truncate">pjonty35@gmail.com</p>
+                <p className="text-xs font-bold text-gray-900">{authUser?.user_metadata?.full_name || 'Odysha traveller'}</p>
+                <p className="text-[10px] text-gray-500 truncate">{authUser?.email}</p>
               </div>
               <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
                 Active
@@ -530,6 +599,8 @@ export const Header: React.FC<HeaderProps> = ({
               <input
                 type="text"
                 placeholder="Enter your name"
+                value={authFullName}
+                onChange={(event) => setAuthFullName(event.target.value)}
                 className="
                   w-full
                   rounded-xl
@@ -553,8 +624,10 @@ export const Header: React.FC<HeaderProps> = ({
             </label>
 
             <input
-              type="email"
-              placeholder="you@example.com"
+                type="email"
+                placeholder="you@example.com"
+                value={authEmail}
+                onChange={(event) => setAuthEmail(event.target.value)}
               className="
                 w-full
                 rounded-xl
@@ -582,8 +655,10 @@ export const Header: React.FC<HeaderProps> = ({
             </label>
 
             <input
-              type="password"
-              placeholder="Enter your password"
+                type="password"
+                placeholder="Enter a secure password"
+                value={authPassword}
+                onChange={(event) => setAuthPassword(event.target.value)}
               className="
                 w-full
                 rounded-xl
@@ -607,10 +682,8 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Submit */}
           <button
             type="button"
-            onClick={() => {
-              setIsLoggedIn(true);
-              setAuthModalOpen(false);
-            }}
+            onClick={handleEmailAuth}
+            disabled={authBusy || !authEmail || !authPassword || (authMode === 'signup' && !authFullName)}
             className="
               w-full
               rounded-xl
@@ -622,12 +695,18 @@ export const Header: React.FC<HeaderProps> = ({
               shadow-sm
               transition
               hover:bg-[#c9552d]
+              disabled:cursor-not-allowed
+              disabled:opacity-60
             "
           >
-            {authMode === 'login'
-              ? 'Login'
-              : 'Create Account'}
+            {authBusy ? 'Please wait…' : authMode === 'login' ? 'Login' : 'Create Account'}
           </button>
+
+          {authMessage && (
+            <p className="mt-3 rounded-xl border border-[#eadfce] bg-[#fff8ee] px-3 py-2 text-center text-xs leading-relaxed text-[#765b42]">
+              {authMessage}
+            </p>
+          )}
 
           {/* Divider */}
           <div className="my-5 flex items-center gap-3">
@@ -641,10 +720,8 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Google */}
           <button
             type="button"
-            onClick={() => {
-              setIsLoggedIn(true);
-              setAuthModalOpen(false);
-            }}
+            onClick={handleGoogleAuth}
+            disabled={authBusy}
             className="
               w-full
               rounded-xl
@@ -658,6 +735,8 @@ export const Header: React.FC<HeaderProps> = ({
               transition-all
               hover:border-[#c9552d]/40
               hover:bg-[#fffaf3]
+              disabled:cursor-not-allowed
+              disabled:opacity-60
             "
           >
             Continue with Google
