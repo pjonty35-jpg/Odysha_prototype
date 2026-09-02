@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, type FormEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { Globe, Bell, Bookmark, ChevronDown, Menu, ShieldAlert, X } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
@@ -34,6 +34,19 @@ export const Header: React.FC<HeaderProps> = ({
   const [authBusy, setAuthBusy] = useState(false);
   const isLoggedIn = Boolean(authUser);
 
+  const openAuthModal = (mode: 'login' | 'signup' = 'login') => {
+    setAuthMode(mode);
+    setAuthMessage('');
+    setAuthPassword('');
+    setAuthModalOpen(true);
+  };
+
+  const switchAuthMode = (mode: 'login' | 'signup') => {
+    setAuthMode(mode);
+    setAuthMessage('');
+    setAuthPassword('');
+  };
+
   useEffect(() => {
     if (!supabase) return;
 
@@ -45,7 +58,27 @@ export const Header: React.FC<HeaderProps> = ({
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  const handleEmailAuth = async () => {
+  const handleEmailAuth = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const email = authEmail.trim();
+    const fullName = authFullName.trim();
+
+    if (!email || !authPassword) {
+      setAuthMessage('Enter your email address and password.');
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setAuthMessage('Enter a valid email address.');
+      return;
+    }
+    if (authMode === 'signup' && !fullName) {
+      setAuthMessage('Enter your full name to create an account.');
+      return;
+    }
+    if (authMode === 'signup' && authPassword.length < 6) {
+      setAuthMessage('Choose a password with at least 6 characters.');
+      return;
+    }
     if (!supabase) {
       setAuthMessage('Authentication is not configured yet. Add the Supabase keys in .env.local.');
       return;
@@ -53,27 +86,32 @@ export const Header: React.FC<HeaderProps> = ({
 
     setAuthBusy(true);
     setAuthMessage('');
-    const result = authMode === 'signup'
-      ? await supabase.auth.signUp({
-          email: authEmail,
-          password: authPassword,
-          options: { data: { full_name: authFullName }, emailRedirectTo: window.location.origin },
-        })
-      : await supabase.auth.signInWithPassword({ email: authEmail, password: authPassword });
+    try {
+      const result = authMode === 'signup'
+        ? await supabase.auth.signUp({
+            email,
+            password: authPassword,
+            options: { data: { full_name: fullName }, emailRedirectTo: window.location.origin },
+          })
+        : await supabase.auth.signInWithPassword({ email, password: authPassword });
 
-    setAuthBusy(false);
-    if (result.error) {
-      setAuthMessage(result.error.message);
-      return;
+      if (result.error) {
+        setAuthMessage(result.error.message);
+        return;
+      }
+
+      if (authMode === 'signup' && !result.data.session) {
+        setAuthMessage('Check your email to verify your account, then sign in.');
+        return;
+      }
+
+      setAuthModalOpen(false);
+      setAuthPassword('');
+    } catch {
+      setAuthMessage('Unable to reach authentication right now. Please try again.');
+    } finally {
+      setAuthBusy(false);
     }
-
-    if (authMode === 'signup' && !result.data.session) {
-      setAuthMessage('Check your email to verify your account, then sign in.');
-      return;
-    }
-
-    setAuthModalOpen(false);
-    setAuthPassword('');
   };
 
   const handleGoogleAuth = async () => {
@@ -84,13 +122,18 @@ export const Header: React.FC<HeaderProps> = ({
 
     setAuthBusy(true);
     setAuthMessage('');
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin },
-    });
-    if (error) {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin },
+      });
+      if (error) {
+        setAuthMessage(error.message);
+        setAuthBusy(false);
+      }
+    } catch {
       setAuthBusy(false);
-      setAuthMessage(error.message);
+      setAuthMessage('Unable to start Google sign-in. Please try again.');
     }
   };
 
@@ -220,9 +263,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  setAuthMode('login');
-                  setAuthMessage('');
-                  setAuthModalOpen(true);
+                  openAuthModal();
                 }}
                 className="
                   rounded-full
@@ -433,6 +474,19 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="pt-4 border-t border-[#eee7dc] flex flex-col gap-3">
+            {!isLoggedIn ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  openAuthModal();
+                }}
+                className="w-full rounded-xl bg-[#182639] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#c9552d]"
+              >
+                Login / Sign Up
+              </button>
+            ) : (
+              <>
             {/* User quick card in mobile drawer */}
             <div className="flex items-center gap-3 p-2 bg-white rounded-xl border border-gray-200">
               <img
@@ -449,16 +503,25 @@ export const Header: React.FC<HeaderProps> = ({
                 Active
               </span>
             </div>
-
-            
-            
+            <button
+              type="button"
+              onClick={async () => {
+                setMobileMenuOpen(false);
+                await supabase?.auth.signOut();
+              }}
+              className="w-full rounded-xl border border-[#eacdc3] px-4 py-2.5 text-sm font-semibold text-[#b84a2d]"
+            >
+              Log out
+            </button>
+              </>
+            )}
           </div>
         </div>
       )}
 
     {authModalOpen &&
       createPortal(
-        <div
+        <form
         className="
           fixed
           inset-0
@@ -473,6 +536,7 @@ export const Header: React.FC<HeaderProps> = ({
           py-6
         "
         onClick={() => setAuthModalOpen(false)}
+        onSubmit={handleEmailAuth}
       >
         <div
           className="
@@ -550,7 +614,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="mb-6 flex rounded-xl border border-[#eadfce] bg-[#f3ede4] p-1">
             <button
               type="button"
-              onClick={() => setAuthMode('login')}
+              onClick={() => switchAuthMode('login')}
               className={`
                 flex-1
                 rounded-lg
@@ -570,7 +634,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button
               type="button"
-              onClick={() => setAuthMode('signup')}
+              onClick={() => switchAuthMode('signup')}
               className={`
                 flex-1
                 rounded-lg
@@ -601,6 +665,7 @@ export const Header: React.FC<HeaderProps> = ({
                 placeholder="Enter your name"
                 value={authFullName}
                 onChange={(event) => setAuthFullName(event.target.value)}
+                required
                 className="
                   w-full
                   rounded-xl
@@ -628,6 +693,7 @@ export const Header: React.FC<HeaderProps> = ({
                 placeholder="you@example.com"
                 value={authEmail}
                 onChange={(event) => setAuthEmail(event.target.value)}
+                required
               className="
                 w-full
                 rounded-xl
@@ -659,6 +725,8 @@ export const Header: React.FC<HeaderProps> = ({
                 placeholder="Enter a secure password"
                 value={authPassword}
                 onChange={(event) => setAuthPassword(event.target.value)}
+                minLength={authMode === 'signup' ? 6 : undefined}
+                required
               className="
                 w-full
                 rounded-xl
@@ -681,8 +749,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Submit */}
           <button
-            type="button"
-            onClick={handleEmailAuth}
+            type="submit"
             disabled={authBusy || !authEmail || !authPassword || (authMode === 'signup' && !authFullName)}
             className="
               w-full
@@ -742,7 +809,7 @@ export const Header: React.FC<HeaderProps> = ({
             Continue with Google
           </button>
 
-          <p className="mt-3 text-center text-[10px] leading-relaxed text-[#8c877f]">
+          <div className="mt-3 text-center text-[10px] leading-relaxed text-[#8c877f]">
             <div className="mt-6 mb-4 overflow-hidden">
               <img
                 src="/src/assets/images/odisha_divider_mandala.png"
@@ -751,9 +818,9 @@ export const Header: React.FC<HeaderProps> = ({
               />
             </div>
             By continuing, you agree to ODYSHA's terms and privacy policy.
-          </p>
+          </div>
             </div>
-          </div>,
+          </form>,
           document.body
         )}
 

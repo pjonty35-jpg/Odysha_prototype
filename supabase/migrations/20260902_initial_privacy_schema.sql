@@ -44,6 +44,18 @@ alter table public.saved_places enable row level security;
 alter table public.journeys enable row level security;
 alter table public.safety_requests enable row level security;
 
+drop policy if exists "Users read their own profile" on public.profiles;
+drop policy if exists "Users update their own profile" on public.profiles;
+drop policy if exists "Users read their own saved places" on public.saved_places;
+drop policy if exists "Users add their own saved places" on public.saved_places;
+drop policy if exists "Users remove their own saved places" on public.saved_places;
+drop policy if exists "Users read their own journeys" on public.journeys;
+drop policy if exists "Users add their own journeys" on public.journeys;
+drop policy if exists "Users update their own journeys" on public.journeys;
+drop policy if exists "Users delete their own journeys" on public.journeys;
+drop policy if exists "Users submit their own safety request" on public.safety_requests;
+drop policy if exists "Users read their own safety requests" on public.safety_requests;
+
 create policy "Users read their own profile" on public.profiles for select using ((select auth.uid()) = id);
 create policy "Users update their own profile" on public.profiles for update using ((select auth.uid()) = id) with check ((select auth.uid()) = id);
 create policy "Users read their own saved places" on public.saved_places for select using ((select auth.uid()) = user_id);
