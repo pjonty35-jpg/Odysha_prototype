@@ -16,6 +16,7 @@ import { ExploreOdishaPage } from './components/ExploreOdishaPage';
 import PlanJourneyPage from './components/PlanJourneyPage';
 import GeneratedJourneyPage from './components/GeneratedJourneyPage';
 import { FooterBanner } from './components/FooterBanner';
+import { TeamSection } from './components/TeamSection';
 import { DestinationModal, CategoryModal, PlanJourneyModal, ExplorePlaceModal } from './components/Modals';
 import { PattachitraGrainBackground } from './components/OdishaMotifs';
 import { POPULAR_DESTINATIONS } from './data/landingData';
@@ -183,6 +184,8 @@ export default function App() {
 />
 )}
       </main>
+
+      {currentPage === 'home' && <TeamSection />}
 
       {/* 6. Footer Banner with Authentic Pattachitra Banner & Apple Translucent Card */}
       <FooterBanner
