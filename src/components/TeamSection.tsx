@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Heart, Instagram, Sparkles } from 'lucide-react';
 import { SectionFlourish } from './OdishaMotifs';
+import { ASSET_IMAGES } from '../data/landingData';
 import biswarupaPhoto from '../assets/images/team-biswarupa-mohapatra.jpeg';
 import swadeshnaPhoto from '../assets/images/team-swadeshna-behera.jpeg';
 import ashaPhoto from '../assets/images/team-asha-das.jpeg';
@@ -26,17 +27,28 @@ const teamMembers = [
 ];
 
 export const TeamSection: React.FC = () => (
-  <section className="relative overflow-hidden bg-[#faf8f4] px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-    <div className="pointer-events-none absolute inset-x-0 top-10 mx-auto h-56 w-56 rounded-full bg-[#d98b57]/10 blur-3xl" />
-    <div className="pointer-events-none absolute -left-20 bottom-0 h-48 w-48 rounded-full bg-[#789b76]/10 blur-3xl" />
+  <section className="relative overflow-hidden bg-[#faf8f4] px-4 pb-14 pt-0 sm:px-6 sm:pb-20 sm:pt-0 lg:px-8">
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 opacity-[0.15]"
+      style={{
+        backgroundImage: `url(${ASSET_IMAGES.dividerAll})`,
+        backgroundPosition: 'center top',
+        backgroundRepeat: 'repeat',
+        backgroundSize: 'min(520px, 80vw) auto',
+      }}
+    />
+    <div className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-56 w-56 rounded-full bg-[#d98b57]/20 blur-3xl" />
+    <div className="pointer-events-none absolute -left-20 bottom-0 h-48 w-48 rounded-full bg-[#789b76]/15 blur-3xl" />
+    <div className="pointer-events-none absolute -right-16 top-1/3 h-56 w-56 rounded-full bg-[#d9a04a]/15 blur-3xl" />
 
-    <div className="relative mx-auto max-w-7xl">
+    <div className="relative z-10 mx-auto max-w-7xl">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto max-w-2xl text-center"
+        className="mx-auto max-w-2xl pt-1 text-center sm:pt-2"
       >
         <div className="inline-flex items-center gap-2 rounded-full border border-[#d98b57]/25 bg-white/55 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#a44729] shadow-sm backdrop-blur-sm">
           <Sparkles className="h-3.5 w-3.5" />
@@ -48,10 +60,11 @@ export const TeamSection: React.FC = () => (
         <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#5c6672] sm:text-base">
           Seven hearts, one shared love for Odisha, and a journey we will always treasure.
         </p>
-        <SectionFlourish icon="all" className="mt-4 mb-8 sm:mb-10" maxHeight="max-h-6 sm:max-h-8" />
+        <SectionFlourish icon="mandala" className="mt-4 mb-8 sm:mb-10" maxHeight="max-h-6 sm:max-h-8" />
       </motion.div>
 
-      <div className="rounded-[28px] border border-white/70 bg-white/35 p-3 shadow-[0_18px_50px_rgba(112,72,42,0.10)] backdrop-blur-md sm:rounded-[34px] sm:p-5 lg:p-7">
+      <div className="relative overflow-hidden rounded-[28px] border border-white/80 bg-white/45 p-3 shadow-[0_18px_50px_rgba(112,72,42,0.13)] backdrop-blur-md sm:rounded-[34px] sm:p-5 lg:p-7">
+        <div className="pointer-events-none absolute inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-[#c9552d]/45 to-transparent" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 xl:grid-cols-7 xl:gap-4">
           {teamMembers.map((member, index) => (
             <motion.article
