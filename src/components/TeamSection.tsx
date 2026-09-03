@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Heart, Instagram, Sparkles } from 'lucide-react';
 import { SectionFlourish } from './OdishaMotifs';
-import { ASSET_IMAGES } from '../data/landingData';
 import biswarupaPhoto from '../assets/images/team-biswarupa-mohapatra.jpeg';
 import swadeshnaPhoto from '../assets/images/team-swadeshna-behera.jpeg';
 import ashaPhoto from '../assets/images/team-asha-das.jpeg';
@@ -28,16 +27,6 @@ const teamMembers = [
 
 export const TeamSection: React.FC = () => (
   <section className="relative overflow-hidden bg-[#faf8f4] px-4 pb-14 pt-0 sm:px-6 sm:pb-20 sm:pt-0 lg:px-8">
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 opacity-[0.15]"
-      style={{
-        backgroundImage: `url(${ASSET_IMAGES.dividerAll})`,
-        backgroundPosition: 'center top',
-        backgroundRepeat: 'repeat',
-        backgroundSize: 'min(520px, 80vw) auto',
-      }}
-    />
     <div className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-56 w-56 rounded-full bg-[#d98b57]/20 blur-3xl" />
     <div className="pointer-events-none absolute -left-20 bottom-0 h-48 w-48 rounded-full bg-[#789b76]/15 blur-3xl" />
     <div className="pointer-events-none absolute -right-16 top-1/3 h-56 w-56 rounded-full bg-[#d9a04a]/15 blur-3xl" />
