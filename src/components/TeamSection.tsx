@@ -54,7 +54,7 @@ export const TeamSection: React.FC = () => (
 
       <div className="relative overflow-hidden rounded-[28px] border border-white/80 bg-white/45 p-3 shadow-[0_18px_50px_rgba(112,72,42,0.13)] backdrop-blur-md sm:rounded-[34px] sm:p-5 lg:p-7">
         <div className="pointer-events-none absolute inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-[#c9552d]/45 to-transparent" />
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 xl:grid-cols-7 xl:gap-4">
+        <div className="grid grid-cols-6 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 xl:grid-cols-7 xl:gap-4">
           {teamMembers.map((member, index) => (
             <motion.article
               key={member.name}
@@ -62,7 +62,7 @@ export const TeamSection: React.FC = () => (
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.45, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative overflow-hidden rounded-2xl border border-[#eadfce] bg-[#fffdf9]/90 p-2 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg sm:rounded-[22px] sm:p-2.5"
+              className={`group relative overflow-hidden rounded-2xl border border-[#eadfce] bg-[#fffdf9]/90 p-2 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg sm:col-span-1 sm:rounded-[22px] sm:p-2.5 ${index < 3 ? 'col-span-2' : 'col-span-3'}`}
             >
               <div className="relative aspect-square overflow-hidden rounded-xl bg-[#eadfce] sm:rounded-2xl">
                 <img
