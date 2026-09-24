@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import {
   Search,
+  ArrowLeft,
   SlidersHorizontal,
   MapPin,
   Star,
@@ -393,9 +394,9 @@ export const ExploreOdishaPage: React.FC<ExploreOdishaPageProps> = ({
             <button
               type="button"
               onClick={onBackHome}
-              className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-white/90 transition-colors hover:text-[#f7d8b0]"
+              className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-3.5 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-white/20"
             >
-              <span className="text-base">←</span>
+              <ArrowLeft className="h-4 w-4" />
               Back to Home
             </button>
 

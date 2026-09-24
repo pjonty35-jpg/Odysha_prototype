@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Accessibility,
+  ArrowLeft,
   ArrowRight,
   Bike,
   CalendarDays,
@@ -552,9 +553,9 @@ export default function PlanJourneyPage({
             <button
               type="button"
               onClick={onBackHome}
-              className="mb-4 flex w-fit items-center gap-2 text-sm font-medium text-[#182f59] transition-colors hover:text-[#c9552d]"
+              className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-[#d98b57]/35 bg-white/60 px-3.5 py-2 text-sm font-semibold text-[#172d49] shadow-sm backdrop-blur-md transition hover:-translate-y-0.5 hover:text-[#b84a2d]"
             >
-              ← Back to Home
+              <ArrowLeft className="h-4 w-4" /> Back to Home
             </button>
 
             <h1

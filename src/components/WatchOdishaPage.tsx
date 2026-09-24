@@ -133,7 +133,7 @@ export const WatchOdishaPage: React.FC<WatchOdishaPageProps> = ({ onBackHome, on
           <div className="absolute inset-0 bg-gradient-to-t from-[#101d2c]/25 via-transparent to-[#101d2c]/5" />
         </div>
         <div className="relative z-10 mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12 lg:px-10">
-          <button type="button" onClick={onBackHome} className="inline-flex items-center gap-2 text-sm font-semibold text-white/90 transition hover:text-[#f7d8b0]">
+          <button type="button" onClick={onBackHome} className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-3.5 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-white/20">
             <ArrowLeft className="h-4 w-4" /> Back to home
           </button>
           <div className="mt-10 max-w-2xl">
