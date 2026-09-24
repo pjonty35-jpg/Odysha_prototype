@@ -7,8 +7,8 @@ import { ASSET_IMAGES } from '../data/landingData';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 
 interface HeaderProps {
-  currentPage?: 'home' | 'explore' | 'watch' | 'emergency' | 'plan' | 'generatedJourney';
-  onNavigate?: (page: 'home' | 'explore' | 'watch' | 'emergency') => void;
+  currentPage?: 'home' | 'explore' | 'watch' | 'food' | 'emergency' | 'about' | 'plan' | 'generatedJourney';
+  onNavigate?: (page: 'home' | 'explore' | 'watch' | 'food' | 'emergency' | 'about') => void;
   onOpenPlan: () => void;
   onSelectCategory?: (id: string) => void;
   savedCount?: number;
@@ -176,13 +176,8 @@ export const Header: React.FC<HeaderProps> = ({
     {
       name: 'About',
       id: 'about',
-      onClick: () => {
-        if (currentPage !== 'home') onNavigate?.('home');
-        setTimeout(() => {
-          document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      },
-      isActive: false,
+      onClick: () => onNavigate?.('about'),
+      isActive: currentPage === 'about',
     },
   ];
 

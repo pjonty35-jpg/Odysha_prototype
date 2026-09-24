@@ -16,7 +16,8 @@ import { ExploreOdishaPage } from './components/ExploreOdishaPage';
 import PlanJourneyPage from './components/PlanJourneyPage';
 import GeneratedJourneyPage from './components/GeneratedJourneyPage';
 import { FooterBanner } from './components/FooterBanner';
-import { TeamSection } from './components/TeamSection';
+import { AboutUsPage } from './components/AboutUsPage';
+import { FoodOdishaPage } from './components/FoodOdishaPage';
 import { DestinationModal, CategoryModal, PlanJourneyModal, ExplorePlaceModal } from './components/Modals';
 import { PattachitraGrainBackground } from './components/OdishaMotifs';
 import { POPULAR_DESTINATIONS } from './data/landingData';
@@ -26,7 +27,7 @@ import { ShieldAlert } from 'lucide-react';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<
-    'home' | 'explore' | 'watch' | 'emergency' | 'plan' | 'generatedJourney'
+    'home' | 'explore' | 'watch' | 'food' | 'emergency' | 'about' | 'plan' | 'generatedJourney'
   >('home');
   const [selectedDestination, setSelectedDestination] = useState<DestinationItem | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<CategoryItem | null>(null);
@@ -55,7 +56,7 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
-  const handleNavigate = (page: 'home' | 'explore' | 'watch' | 'emergency' | 'plan') => {
+  const handleNavigate = (page: 'home' | 'explore' | 'watch' | 'food' | 'emergency' | 'about' | 'plan') => {
   setCurrentPage(page);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
@@ -81,6 +82,14 @@ export default function App() {
       setCurrentPage('plan');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  };
+
+  const handleSelectCategory = (category: CategoryItem) => {
+    if (category.id === 'food') {
+      handleNavigate('food');
+      return;
+    }
+    setSelectedCategory(category);
   };
 
   return (
@@ -129,7 +138,7 @@ export default function App() {
             />
 
             {/* 3. Categories ("What kind of Odisha are you looking for?") */}
-            <CategoriesSection onSelectCategory={setSelectedCategory} />
+            <CategoriesSection onSelectCategory={handleSelectCategory} />
 
             {/* 4. Value Proposition ("Don't just visit Odisha. Discover it.") */}
             <ValuePropositionSection />
@@ -161,8 +170,15 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }}
   />
+) : currentPage === 'food' ? (
+  <FoodOdishaPage
+    onBackHome={() => handleNavigate('home')}
+    onPlanJourney={handleOpenPlanWithDest}
+  />
 ) : currentPage === 'emergency' ? (
   <EmergencyHelpPage onBackHome={() => handleNavigate('home')} />
+) : currentPage === 'about' ? (
+  <AboutUsPage onBackHome={() => handleNavigate('home')} />
 ) : currentPage === 'plan' ? (
   /* Plan Your Journey Dedicated Page */
   <PlanJourneyPage
@@ -185,8 +201,6 @@ export default function App() {
 )}
       </main>
 
-      {currentPage === 'home' && <TeamSection />}
-
       {/* 6. Footer Banner with Authentic Pattachitra Banner & Apple Translucent Card */}
       <FooterBanner
         variant={
@@ -194,6 +208,7 @@ export default function App() {
             ? 'journey'
             : 'default'
         }
+        onAboutUs={currentPage === 'home' ? () => handleNavigate('about') : undefined}
       />
 
       {currentPage !== 'emergency' && (

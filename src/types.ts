@@ -1,7 +1,7 @@
 export interface CategoryItem {
   id: string;
   name: string;
-  iconType: 'beaches' | 'nature' | 'heritage' | 'spiritual' | 'food' | 'arts' | 'wildlife' | 'hiddenGems';
+  iconType: 'beaches' | 'nature' | 'heritage' | 'spiritual' | 'food' | 'arts' | 'wildlife' | 'hiddenGems' | 'festivals';
   accentColor: string;
   description: string;
   tagline: string;

@@ -161,6 +161,18 @@ export const CategoryIcon: React.FC<{ type: string; className?: string }> = ({ t
         </svg>
       );
 
+    case 'festivals':
+      return (
+        <svg viewBox="0 0 48 48" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* A ceremonial festival flag, diya and celebratory sparkles */}
+          <path d="M14 42V7" stroke="#b84a2d" strokeWidth="2.2" strokeLinecap="round" />
+          <path d="M15 8C23 7 27 11 34 8V22C27 25 23 21 15 22V8Z" fill="#fff1e8" stroke="#b84a2d" strokeWidth="2" strokeLinejoin="round" />
+          <path d="M24 31C21 34 21 38 24 40C27 38 27 34 24 31Z" fill="#ea580c" />
+          <path d="M18 41H30" stroke="#b84a2d" strokeWidth="2" strokeLinecap="round" />
+          <path d="M37 27V23M35 25H39M34 29L32 31M40 29L42 31" stroke="#d97706" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      );
+
     default:
       return null;
   }

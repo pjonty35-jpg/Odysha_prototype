@@ -30,6 +30,7 @@ import catFoodImg from '../assets/images/category_food.png';
 import catCraftsImg from '../assets/images/category_crafts.png';
 import catWildlifeImg from '../assets/images/category_wildlife.png';
 import catHiddenImg from '../assets/images/category_hidden.png';
+import catFestivalsImg from '../assets/images/category_festivals.png';
 
 export const ASSET_IMAGES = {
   hero: heroImg,
@@ -61,6 +62,7 @@ export const ASSET_IMAGES = {
   catCrafts: catCraftsImg,
   catWildlife: catWildlifeImg,
   catHidden: catHiddenImg,
+  catFestivals: catFestivalsImg,
 };
 
 export const CATEGORIES: CategoryItem[] = [
@@ -143,6 +145,16 @@ export const CATEGORIES: CategoryItem[] = [
     description: 'Untouched hill stations, hidden waterfalls, tribal weekly haats, and secluded valleys away from commercial crowds.',
     tagline: 'Secret retreats off the beaten track',
     popularSpots: ['Deomali Mountain Peak', 'Gudguda Waterfall', 'Khandadhar Falls', 'Mandarmani River Estuary'],
+  },
+  {
+    id: 'festivals',
+    name: 'Festivals',
+    iconType: 'festivals',
+    image: catFestivalsImg,
+    accentColor: '#b84a2d',
+    description: 'Experience Odisha at its most vibrant through grand chariot processions, temple rituals, tribal celebrations, dance, music and living traditions.',
+    tagline: 'A calendar alive with colour, faith and celebration',
+    popularSpots: ['Rath Yatra in Puri', 'Bali Jatra in Cuttack', 'Konark Dance Festival', 'Chaita Parab in Koraput'],
   },
 ];
 

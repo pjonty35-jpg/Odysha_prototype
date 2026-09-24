@@ -4,10 +4,12 @@ import journeyFooterImage from '../../Footer2.png';
 
 interface FooterBannerProps {
   variant?: 'default' | 'journey';
+  onAboutUs?: () => void;
 }
 
 export const FooterBanner: React.FC<FooterBannerProps> = ({
   variant = 'default',
+  onAboutUs,
 }) => {
   const backgroundImage =
     variant === 'journey' ? journeyFooterImage : footerImage;
@@ -82,6 +84,27 @@ export const FooterBanner: React.FC<FooterBannerProps> = ({
           >
             ❈
           </div>
+
+          {onAboutUs && (
+            <button
+              type="button"
+              onClick={onAboutUs}
+              style={{
+                marginTop: '12px',
+                border: '1px solid rgba(184, 106, 50, 0.45)',
+                borderRadius: '999px',
+                background: 'rgba(255, 255, 255, 0.52)',
+                color: '#102342',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 700,
+                padding: '9px 18px',
+                boxShadow: '0 4px 14px rgba(75, 48, 24, 0.1)',
+              }}
+            >
+              About us
+            </button>
+          )}
         </div>
       </div>
     </footer>

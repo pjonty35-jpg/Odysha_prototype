@@ -23,6 +23,33 @@
   scrollbar-width: none;
 }
 
+/* Keep the complete discovery set together on desktop, including Festivals. */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* The ninth category gets its own centered line on phones instead of leaving a blank right-hand slot. */
+@media (max-width: 639px) {
+  .category-grid > :last-child {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc((100% - 0.625rem) / 2);
+  }
+}
+
+@media (min-width: 640px) {
+  .category-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .category-grid {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+}
+
 .leaflet-container {
   font-family: inherit;
   z-index: 0;
