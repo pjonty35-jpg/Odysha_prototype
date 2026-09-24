@@ -18,6 +18,7 @@ import GeneratedJourneyPage from './components/GeneratedJourneyPage';
 import { FooterBanner } from './components/FooterBanner';
 import { AboutUsPage } from './components/AboutUsPage';
 import { FoodOdishaPage } from './components/FoodOdishaPage';
+import { FestivalOdishaPage } from './components/FestivalOdishaPage';
 import { DestinationModal, CategoryModal, PlanJourneyModal, ExplorePlaceModal } from './components/Modals';
 import { PattachitraGrainBackground } from './components/OdishaMotifs';
 import { POPULAR_DESTINATIONS } from './data/landingData';
@@ -27,7 +28,7 @@ import { ShieldAlert } from 'lucide-react';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<
-    'home' | 'explore' | 'watch' | 'food' | 'emergency' | 'about' | 'plan' | 'generatedJourney'
+    'home' | 'explore' | 'watch' | 'food' | 'festival' | 'emergency' | 'about' | 'plan' | 'generatedJourney'
   >('home');
   const [selectedDestination, setSelectedDestination] = useState<DestinationItem | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<CategoryItem | null>(null);
@@ -56,7 +57,7 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
-  const handleNavigate = (page: 'home' | 'explore' | 'watch' | 'food' | 'emergency' | 'about' | 'plan') => {
+  const handleNavigate = (page: 'home' | 'explore' | 'watch' | 'food' | 'festival' | 'emergency' | 'about' | 'plan') => {
   setCurrentPage(page);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
@@ -85,8 +86,8 @@ export default function App() {
   };
 
   const handleSelectCategory = (category: CategoryItem) => {
-    if (category.id === 'food') {
-      handleNavigate('food');
+    if (category.id === 'food' || category.id === 'festivals') {
+      handleNavigate(category.id === 'food' ? 'food' : 'festival');
       return;
     }
     setSelectedCategory(category);
@@ -172,6 +173,11 @@ export default function App() {
   />
 ) : currentPage === 'food' ? (
   <FoodOdishaPage
+    onBackHome={() => handleNavigate('home')}
+    onPlanJourney={handleOpenPlanWithDest}
+  />
+) : currentPage === 'festival' ? (
+  <FestivalOdishaPage
     onBackHome={() => handleNavigate('home')}
     onPlanJourney={handleOpenPlanWithDest}
   />

@@ -7,8 +7,8 @@ import { ASSET_IMAGES } from '../data/landingData';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 
 interface HeaderProps {
-  currentPage?: 'home' | 'explore' | 'watch' | 'food' | 'emergency' | 'about' | 'plan' | 'generatedJourney';
-  onNavigate?: (page: 'home' | 'explore' | 'watch' | 'food' | 'emergency' | 'about') => void;
+  currentPage?: 'home' | 'explore' | 'watch' | 'food' | 'festival' | 'emergency' | 'about' | 'plan' | 'generatedJourney';
+  onNavigate?: (page: 'home' | 'explore' | 'watch' | 'food' | 'festival' | 'emergency' | 'about') => void;
   onOpenPlan: () => void;
   onSelectCategory?: (id: string) => void;
   savedCount?: number;

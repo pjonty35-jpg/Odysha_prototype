@@ -15,15 +15,15 @@ import {
   X,
 } from 'lucide-react';
 import { PattachitraGrainBackground, SectionFlourish } from './OdishaMotifs';
-import foodHero from '../assets/images/food/food-hero.png';
-import pakhalaImage from '../assets/images/food/pakhala-bhata.png';
-import dalmaImage from '../assets/images/food/dalma.png';
-import chhenaPodaImage from '../assets/images/food/chhena-poda.png';
-import dahibaraImage from '../assets/images/food/dahibara-aloodum.png';
-import mahaprasadImage from '../assets/images/food/mahaprasad.png';
-import rasabaliImage from '../assets/images/food/rasabali.png';
-import mandiaImage from '../assets/images/food/mandia-peja.png';
-import machaImage from '../assets/images/food/macha-ghanta.png';
+import foodHero from '../assets/images/food/food-hero.webp';
+import pakhalaImage from '../assets/images/food/pakhala-bhata.webp';
+import dalmaImage from '../assets/images/food/dalma.webp';
+import chhenaPodaImage from '../assets/images/food/chhena-poda.webp';
+import dahibaraImage from '../assets/images/food/dahibara-aloodum.webp';
+import mahaprasadImage from '../assets/images/food/mahaprasad.webp';
+import rasabaliImage from '../assets/images/food/rasabali.webp';
+import mandiaImage from '../assets/images/food/mandia-peja.webp';
+import machaImage from '../assets/images/food/macha-ghanta.webp';
 
 type Dish = {
   id: string;
@@ -159,7 +159,7 @@ export const FoodOdishaPage: React.FC<FoodOdishaPageProps> = ({ onBackHome, onPl
 
       <main className="relative z-10 mx-auto max-w-7xl px-4 pt-7 sm:px-6 sm:pt-10 lg:px-8">
         <section className="relative min-h-[430px] overflow-hidden rounded-[30px] border border-white/70 shadow-[0_22px_60px_rgba(93,55,28,0.2)] sm:min-h-[470px] sm:rounded-[36px]">
-          <img src={foodHero} alt="Traditional Odia food spread" className="absolute inset-0 h-full w-full object-cover object-center" />
+          <img src={foodHero} alt="Traditional Odia food spread" loading="eager" decoding="async" className="absolute inset-0 h-full w-full object-cover object-center" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#102342]/95 via-[#102342]/70 to-[#102342]/10" />
           <div className="relative flex min-h-[430px] max-w-2xl flex-col justify-center px-7 py-10 text-white sm:min-h-[470px] sm:px-12 lg:px-16">
             <button type="button" onClick={onBackHome} className="inline-flex w-fit items-center gap-2 rounded-full border border-white/35 bg-white/10 px-3.5 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-white/20">
@@ -201,7 +201,7 @@ export const FoodOdishaPage: React.FC<FoodOdishaPageProps> = ({ onBackHome, onPl
 
             {visibleDishes.length ? <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {visibleDishes.map((dish) => <button key={dish.id} type="button" onClick={() => setActiveDish(dish)} className="group overflow-hidden rounded-[24px] border border-[#eadfce] bg-[#fffdfa]/85 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-                <div className="relative aspect-[4/3] overflow-hidden"><img src={dish.image} alt={dish.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /><div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#102342]/75 to-transparent" /><span className="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#172d49] backdrop-blur">{dish.district}</span><span className="absolute bottom-3 left-4 text-xs font-semibold text-white">Read its story <ArrowRight className="ml-1 inline h-3.5 w-3.5" /></span></div>
+                <div className="relative aspect-[4/3] overflow-hidden"><img src={dish.image} alt={dish.name} loading="lazy" decoding="async" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /><div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#102342]/75 to-transparent" /><span className="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#172d49] backdrop-blur">{dish.district}</span><span className="absolute bottom-3 left-4 text-xs font-semibold text-white">Read its story <ArrowRight className="ml-1 inline h-3.5 w-3.5" /></span></div>
                 <div className="p-4"><div className="flex items-start justify-between gap-3"><h3 className="font-serif text-xl font-bold">{dish.name}</h3><span className={`mt-1 whitespace-nowrap text-[10px] font-bold uppercase tracking-wide ${dish.dietary === 'Vegetarian' ? 'text-[#4d7c0f]' : 'text-[#b84a2d]'}`}>{dish.dietary === 'Vegetarian' ? '● Veg' : '● Non-veg'}</span></div><p className="mt-2 text-sm leading-relaxed text-[#657080]">{dish.shortDescription}</p><p className="mt-3 flex items-center gap-1.5 text-xs text-[#8a735a]"><Clock3 className="h-3.5 w-3.5" />{dish.availability}</p></div>
               </button>)}
             </div> : <div className="rounded-[26px] border border-dashed border-[#d9c9b7] bg-white/45 px-6 py-14 text-center"><Sparkles className="mx-auto h-6 w-6 text-[#c9552d]" /><h3 className="mt-3 font-serif text-2xl font-bold">We’re gathering this district’s food stories.</h3><p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-[#657080]">Try another district for now, or explore all of Odisha while we continue documenting regional dishes.</p><button type="button" onClick={() => { setDistrict('All Odisha'); setQuery(''); }} className="mt-5 rounded-full bg-[#172d49] px-4 py-2 text-sm font-semibold text-white">Explore all Odisha</button></div>}
